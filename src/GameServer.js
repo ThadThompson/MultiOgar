@@ -275,7 +275,7 @@ GameServer.prototype.socketEvent = function(ws) {
     ws.on('error', function(error) {
         ws.packetHandler.sendPacket = function(data) {};
     });
-    ws.on('close', function(reason) {
+    ws.on('close', (reason) => {
         if (ws._socket.destroy != null && typeof ws._socket.destroy == 'function') ws._socket.destroy();
         Log.info((ws.playerTracker._name || 'An unnamed cell') + ' has disconnected from the server.');
         self.socketCount--;
@@ -287,7 +287,7 @@ GameServer.prototype.socketEvent = function(ws) {
         };
         ws.closeTime = Date.now();
         Log.write("DISCONNECTED " + ws.remoteAddress + ":" + ws.remotePort + ", code: " + ws._closeCode + ", reason: \"" + ws._closeMessage + "\", name: \"" + ws.playerTracker._name + "\"");
-        if (gameServer.config.playerGrayDisconnect) {
+        if (this.config.playerGrayDisconnect) {
             var gray = Math.min(255, (ws.playerTracker.color.r * .2125 + ws.playerTracker.color.g * .7154 + ws.playerTracker.color.b * .0721)) >>> 0,
                 color = {
                     r: gray,
